@@ -1,5 +1,6 @@
 ext {
     kotlinVersion = "1.4.10"
+    detektVersion = "1.14.0"
 
     projectPlugins = [
             "com.android.tools.build:gradle:4.0.1",
