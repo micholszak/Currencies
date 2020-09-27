@@ -40,6 +40,7 @@ dependencies {
     implementation coreAndroidDependencies
     implementation uiDependencies
     implementation reactiveDependencies
+    implementation networkingDependencies
 
     implementation lifecycleDependencies
     implementation diDependencies
