@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -37,7 +39,11 @@ dependencies {
     implementation kotlinStd
     implementation coreAndroidDependencies
     implementation uiDependencies
+    implementation reactiveDependencies
+
+    implementation lifecycleDependencies
+    implementation diDependencies
+    kapt projectProcessors
     testImplementation testDependencies
     androidTestImplementation androidTestDependencies
-
 }
