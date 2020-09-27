@@ -1,9 +1,9 @@
-name: Run Build and Test for every commit to master
-
+name: Code Review
 on:
   pull_request:
     branches: [ master ]
-
+  push:
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
