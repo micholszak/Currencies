@@ -6,11 +6,13 @@ ext {
     hiltViewModelVersion = "1.0.0-alpha02"
     lifecycleVersion = "2.2.0"
     retrofitVersion = "2.9.0"
+    okhttpVersion = "4.9.0"
+    jUnit5Version = "5.6.2"
 
     projectPlugins = [
             "com.android.tools.build:gradle:4.0.1",
             "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
-            "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+            "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion",
     ]
 
     kotlinStd = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
@@ -22,7 +24,9 @@ ext {
 
     lifecycleDependencies = [
             "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
-            "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+            "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+            "androidx.activity:activity-ktx:1.1.0",
+            "androidx.fragment:fragment-ktx:1.2.5"
     ]
 
     uiDependencies = [
@@ -39,7 +43,10 @@ ext {
     networkingDependencies = [
             "com.squareup.retrofit2:retrofit:$retrofitVersion",
             "com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion",
-            "com.squareup.okhttp3:okhttp:4.9.0"
+            "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
+            "com.squareup.moshi:moshi-kotlin:1.10.0",
+            "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
     ]
 
     diDependencies = [
