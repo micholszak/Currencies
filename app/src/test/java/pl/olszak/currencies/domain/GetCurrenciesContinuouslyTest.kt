@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.*
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.junit.Test
-import pl.olszak.currencies.core.concurrent.TestSchedulerProvider
+import pl.olszak.currencies.core.concurrent.TestSchedulersProvider
 import pl.olszak.currencies.domain.data.CurrencyService
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +14,7 @@ class GetCurrenciesContinuouslyTest {
         on { getCurrencies(anyOrNull()) } doReturn Single.just(emptyList())
     }
     private val testScheduler = TestScheduler()
-    private val testSchedulerProvider = TestSchedulerProvider(computation = testScheduler)
+    private val testSchedulerProvider = TestSchedulersProvider(computation = testScheduler)
 
     private val useCase = GetCurrenciesContinuously(
         service = mockService,

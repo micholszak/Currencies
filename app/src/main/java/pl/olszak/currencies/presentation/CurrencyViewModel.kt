@@ -4,8 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import pl.olszak.currencies.core.concurrent.SchedulersProvider
+import pl.olszak.currencies.core.concurrent.SchedulerFacade
 import pl.olszak.currencies.domain.GetCurrenciesContinuously
 import pl.olszak.currencies.domain.data.model.Currency
 import pl.olszak.currencies.presentation.model.CurrencyItemConverter
@@ -14,7 +13,7 @@ import pl.olszak.currencies.view.adapter.model.CurrencyItem
 
 class CurrencyViewModel @ViewModelInject constructor(
     private val getCurrenciesContinuously: GetCurrenciesContinuously,
-    private val schedulersProvider: SchedulersProvider,
+    private val schedulerFacade: SchedulerFacade,
     private val itemConverter: CurrencyItemConverter
 ) : ViewModel() {
 
@@ -23,7 +22,6 @@ class CurrencyViewModel @ViewModelInject constructor(
     val displayableItems: LiveData<List<CurrencyItem>> = mutableItems
 
     private var state = CurrencyState()
-    private val disposables = CompositeDisposable()
 
     init {
         requestForList()
@@ -50,13 +48,14 @@ class CurrencyViewModel @ViewModelInject constructor(
     private fun requestForList(code: String? = null) {
         clearSubscriptions()
         val currencyRequest = getCurrenciesContinuously.execute(currencyCode = code)
-            .subscribeOn(schedulersProvider.computation())
-            .observeOn(schedulersProvider.main())
-            .subscribe { currencies ->
+        schedulerFacade.subscribe(
+            subscriber = this,
+            source = currencyRequest,
+            onNext = { currencies ->
                 populateState(currencies)
                 populateAdapter()
             }
-        disposables.add(currencyRequest)
+        )
     }
 
     private fun populateAdapter() {
@@ -82,9 +81,7 @@ class CurrencyViewModel @ViewModelInject constructor(
     }
 
     private fun clearSubscriptions() {
-        if (disposables.isDisposed.not()) {
-            disposables.clear()
-        }
+        schedulerFacade.unsubscribeFor(this)
     }
 
     private fun List<Currency>.switchFirst(code: String): List<Currency> {
