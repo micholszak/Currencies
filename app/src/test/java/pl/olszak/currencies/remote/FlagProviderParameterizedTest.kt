@@ -4,14 +4,17 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import pl.olszak.currencies.view.adapter.model.Flag
 
 @RunWith(Parameterized::class)
 class FlagProviderParameterizedTest(
     private val givenCurrencyCode: String,
-    private val expectedResult: String
+    private val expectedResult: Flag
 ) {
 
     companion object {
+        private val EMPTY_FLAG = Flag()
+
         @JvmStatic
         @Parameterized.Parameters(name = "{0} to {1}")
         fun parameters(): Collection<Array<Any>> =
@@ -30,29 +33,31 @@ class FlagProviderParameterizedTest(
                 ),
                 testCase(
                     givenCurrencyCode = "Polska",
-                    expectedResult = ""
+                    expectedResult = EMPTY_FLAG
                 ),
                 testCase(
                     givenCurrencyCode = "",
-                    expectedResult = ""
+                    expectedResult = EMPTY_FLAG
                 ),
                 testCase(
                     givenCurrencyCode = "PL",
-                    expectedResult = ""
+                    expectedResult = EMPTY_FLAG
                 )
             )
 
-        private fun testCase(givenCurrencyCode: String, expectedResult: String): Array<Any> =
+        private fun testCase(givenCurrencyCode: String, expectedResult: Flag): Array<Any> =
             arrayOf(givenCurrencyCode, expectedResult)
 
         private fun flagWebsite(code: String) =
-            "https://www.countryflags.io/$code/flat/64.png"
+            Flag("https://www.countryflags.io/$code/flat/64.png")
     }
+
+    private val provider = FlagProvider()
 
     @Test
     fun `Properly convert currency code into flag url`() {
-        val result = FlagProvider.forCurrency(givenCurrencyCode)
+        val result = provider.forCurrency(givenCurrencyCode)
 
-        assertThat(result).isEqualTo(expectedResult)
+        assertThat(result).isEqualTo(expectedResult.url)
     }
 }

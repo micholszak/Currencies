@@ -1,15 +1,20 @@
 package pl.olszak.currencies.remote
 
-object FlagProvider {
+import pl.olszak.currencies.view.adapter.model.Flag
+import javax.inject.Inject
 
-    private const val ISO_4217_CODE_LENGTH = 3
+class FlagProvider @Inject constructor() {
 
-    fun forCurrency(currencyCode: String): String {
-        if (isValidCurrencyCode(currencyCode)) {
+    companion object {
+        private const val ISO_4217_CODE_LENGTH = 3
+    }
+
+    fun forCurrency(currencyCode: String): Flag {
+        val url = if (isValidCurrencyCode(currencyCode)) {
             val countryCode = currencyCode.take(2)
-            return "https://www.countryflags.io/$countryCode/flat/64.png"
-        }
-        return ""
+            "https://www.countryflags.io/$countryCode/flat/64.png"
+        } else ""
+        return Flag(url)
     }
 
     private fun isValidCurrencyCode(code: String): Boolean =

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Currencies</string>
+
+    <string name="currency_calculator_hint">0</string>
 </resources>

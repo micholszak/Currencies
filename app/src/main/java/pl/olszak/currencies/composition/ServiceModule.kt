@@ -4,13 +4,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import pl.olszak.currencies.core.DebugLogger
-import pl.olszak.currencies.utils.LogCatLogger
+import pl.olszak.currencies.domain.data.CurrencyService
+import pl.olszak.currencies.domain.data.CurrencyServiceFacade
 
 @Module
 @InstallIn(ApplicationComponent::class)
-abstract class DebugModule {
+abstract class ServiceModule {
 
     @Binds
-    abstract fun bindLogger(logCatLogger: LogCatLogger): DebugLogger
+    abstract fun bindCurrencyService(facade: CurrencyServiceFacade): CurrencyService
 }

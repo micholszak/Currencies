@@ -1,6 +1,7 @@
 package pl.olszak.currencies.utils
 
 import android.util.Log
+import pl.olszak.currencies.core.DebugLogger
 import javax.inject.Inject
 import javax.inject.Singleton
 

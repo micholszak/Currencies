@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/flag_image"
+        android:layout_width="@dimen/flag_image_size"
+        android:layout_height="@dimen/flag_image_size"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginBottom="@dimen/large_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currency__code_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/currency_code_text_size"
+        app:layout_constraintStart_toEndOf="@id/flag_image"
+        app:layout_constraintTop_toTopOf="@id/flag_image"
+        tools:text="PLN" />
+
+    <EditText
+        android:id="@+id/currency_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/minimum_width"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:hint="@string/currency_calculator_hint"
+        android:maxLength="10"
+        android:inputType="number|numberDecimal"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/currency_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

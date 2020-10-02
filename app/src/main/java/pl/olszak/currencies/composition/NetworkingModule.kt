@@ -8,8 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pl.olszak.currencies.core.DebugLogger
 import pl.olszak.currencies.remote.CurrencyApi
-import pl.olszak.currencies.utils.DebugLogger
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory

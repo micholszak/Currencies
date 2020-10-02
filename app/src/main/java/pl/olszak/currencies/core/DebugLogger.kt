@@ -1,4 +1,4 @@
-package pl.olszak.currencies.utils
+package pl.olszak.currencies.core
 
 interface DebugLogger {
 
