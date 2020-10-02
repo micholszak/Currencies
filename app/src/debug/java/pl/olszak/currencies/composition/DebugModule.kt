@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import pl.olszak.currencies.core.DebugLogger
-import pl.olszak.currencies.utils.LogCatLogger
+import pl.olszak.currencies.core.LogCatLogger
 
 @Module
 @InstallIn(ApplicationComponent::class)

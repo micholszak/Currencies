@@ -58,6 +58,6 @@ class FlagProviderParameterizedTest(
     fun `Properly convert currency code into flag url`() {
         val result = provider.forCurrency(givenCurrencyCode)
 
-        assertThat(result).isEqualTo(expectedResult.url)
+        assertThat(result).isEqualTo(expectedResult)
     }
 }
