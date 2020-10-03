@@ -30,7 +30,7 @@ class CurrencyViewModel @ViewModelInject constructor(
     fun onCurrencyChosen(item: CurrencyItem) {
         state = state.copy(
             enteredValue = item.amount,
-            currentList = state.currentList.switchFirst(item.code)
+            currentList = state.currentList.reorderFor(item.code)
         )
         populateAdapter()
         requestForList(code = item.code)
@@ -52,7 +52,7 @@ class CurrencyViewModel @ViewModelInject constructor(
             subscriber = this,
             source = currencyRequest,
             onNext = { currencies ->
-                populateState(currencies)
+                populateStateWith(currencies)
                 populateAdapter()
             }
         )
@@ -67,7 +67,7 @@ class CurrencyViewModel @ViewModelInject constructor(
         mutableItems.postValue(adapterItems)
     }
 
-    private fun populateState(currencies: List<Currency>) {
+    private fun populateStateWith(currencies: List<Currency>) {
         val newList: List<Currency> = if (state.currentList.isEmpty()) {
             currencies
         } else {
@@ -84,7 +84,7 @@ class CurrencyViewModel @ViewModelInject constructor(
         schedulerFacade.unsubscribeFor(this)
     }
 
-    private fun List<Currency>.switchFirst(code: String): List<Currency> {
+    private fun List<Currency>.reorderFor(code: String): List<Currency> {
         val currency = first { currency -> currency.code == code }
         val newList = toMutableList()
         newList.remove(currency)

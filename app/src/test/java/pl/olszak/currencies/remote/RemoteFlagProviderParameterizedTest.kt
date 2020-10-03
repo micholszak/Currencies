@@ -7,7 +7,7 @@ import org.junit.runners.Parameterized
 import pl.olszak.currencies.view.adapter.model.Flag
 
 @RunWith(Parameterized::class)
-class FlagProviderParameterizedTest(
+class RemoteFlagProviderParameterizedTest(
     private val givenCurrencyCode: String,
     private val expectedResult: Flag
 ) {
@@ -52,7 +52,7 @@ class FlagProviderParameterizedTest(
             Flag("https://www.countryflags.io/$code/flat/64.png")
     }
 
-    private val provider = FlagProvider()
+    private val provider = RemoteFlagProvider()
 
     @Test
     fun `Properly convert currency code into flag url`() {
