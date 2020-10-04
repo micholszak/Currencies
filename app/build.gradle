@@ -19,6 +19,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions "api"
+
+    productFlavors {
+        mock {
+            applicationId "${applicationId}.mock"
+            dimension "api"
+        }
+        production {
+            dimension "api"
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
