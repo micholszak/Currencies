@@ -24,5 +24,13 @@ fun RecyclerView.scrollToTop() {
     linearLayoutManager?.scrollToPositionWithOffset(FIRST_POSITION, OFFSET)
 }
 
+fun View.hide() {
+    visibility = View.GONE
+}
+
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
 private val Context.inputMethodManager: InputMethodManager?
     get() = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

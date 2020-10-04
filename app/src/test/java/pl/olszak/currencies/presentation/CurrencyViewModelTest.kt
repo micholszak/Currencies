@@ -7,12 +7,14 @@ import io.reactivex.rxjava3.core.Observable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import pl.olszak.currencies.core.collectEmissions
 import pl.olszak.currencies.core.concurrent.MapSchedulerFacade
 import pl.olszak.currencies.core.concurrent.TestSchedulersProvider
 import pl.olszak.currencies.core.getOrAwaitValue
 import pl.olszak.currencies.domain.GetCurrenciesContinuously
 import pl.olszak.currencies.domain.data.model.Currency
 import pl.olszak.currencies.presentation.model.CurrencyItemConverter
+import pl.olszak.currencies.presentation.model.CurrencyViewState
 import pl.olszak.currencies.remote.ConstantFlagProvider
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 import pl.olszak.currencies.view.adapter.model.Flag
@@ -74,7 +76,16 @@ class CurrencyViewModelTest {
     }
 
     @Test
-    fun `Properly startup the view model`() {
+    fun `Start with Loading state`() {
+        val state = viewModel.viewState.getOrAwaitValue()
+
+        assertThat(state).isEqualTo(CurrencyViewState.Loading)
+    }
+
+    @Test
+    fun `Fetch properly currencies`() {
+        viewModel.fetchCurrencies()
+
         verify(schedulerFacade).unsubscribeFor(viewModel)
         verify(useCase).execute()
         verify(itemConverter).convertFor("", LIST)
@@ -82,6 +93,7 @@ class CurrencyViewModelTest {
 
     @Test
     fun `Change of currency should trigger another request`() {
+        viewModel.fetchCurrencies()
         triggerChangeToUSD()
 
         verify(useCase).execute(currencyCode = USD)
@@ -89,18 +101,24 @@ class CurrencyViewModelTest {
 
     @Test
     fun `Reorder emitted list when currencies change`() {
+        viewModel.fetchCurrencies()
         triggerChangeToUSD()
 
-        val items = viewModel.displayableItems.getOrAwaitValue()
-        val currencies = items.map(CurrencyItem::code)
+        val successfulFetch =
+            viewModel.viewState.getOrAwaitValue() as CurrencyViewState.SuccessfulFetch
+        val currencies = successfulFetch.displayableItems.map(CurrencyItem::code)
         assertThat(currencies).isEqualTo(listOf(USD, PLN, EUR))
     }
 
     @Test
     fun `Recalculate emitted list when currencies change`() {
+        viewModel.fetchCurrencies()
         triggerChangeToUSD("5")
 
-        val items = viewModel.displayableItems.getOrAwaitValue()
+        val successfulFetch =
+            viewModel.viewState.getOrAwaitValue() as CurrencyViewState.SuccessfulFetch
+        val items = successfulFetch.displayableItems
+
         val first = items.first()
         (first).run {
             assertThat(code).isEqualTo(USD)
@@ -115,8 +133,12 @@ class CurrencyViewModelTest {
 
     @Test
     fun `Recalculate values for items on value change`() {
+        viewModel.fetchCurrencies()
         viewModel.onCurrencyValueChange("5")
-        val items = viewModel.displayableItems.getOrAwaitValue()
+
+        val successfulFetch =
+            viewModel.viewState.getOrAwaitValue() as CurrencyViewState.SuccessfulFetch
+        val items = successfulFetch.displayableItems
 
         val first = items.first()
         (first).run {
@@ -130,6 +152,26 @@ class CurrencyViewModelTest {
         }
     }
 
+    @Test
+    fun `Change state when remote error occurs`() {
+        givenServiceReturnsError()
+        viewModel.fetchCurrencies()
+
+        val state = viewModel.viewState.getOrAwaitValue()
+        assertThat(state).isEqualTo(CurrencyViewState.NetworkError)
+    }
+
+    @Test
+    fun `Should post loading on tryRefreshing`() {
+        val emissions = viewModel.viewState.collectEmissions()
+        viewModel.tryRefresh()
+
+        assertThat(emissions.size).isEqualTo(3)
+        val lastEmissions = emissions.drop(1)
+        assertThat(lastEmissions.first()).isEqualTo(CurrencyViewState.Loading)
+        assertThat(lastEmissions.last()).isInstanceOf(CurrencyViewState.SuccessfulFetch::class.java)
+    }
+
     private fun triggerChangeToUSD(currencyAmount: String = "1") {
         viewModel.onCurrencyChosen(
             CurrencyItem(
@@ -138,5 +180,9 @@ class CurrencyViewModelTest {
                 amount = currencyAmount
             )
         )
+    }
+
+    private fun givenServiceReturnsError() {
+        whenever(useCase.execute(anyOrNull(), anyOrNull())).doReturn(Observable.error(Exception()))
     }
 }

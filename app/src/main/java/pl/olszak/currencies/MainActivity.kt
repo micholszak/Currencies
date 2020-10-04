@@ -1,9 +1,9 @@
-package pl.olszak.currencies.view
+package pl.olszak.currencies
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import pl.olszak.currencies.R
+import pl.olszak.currencies.view.CurrenciesFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

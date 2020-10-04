@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Currencies</string>
-
     <string name="currency_calculator_hint">0</string>
+    <string name="no_network_connection">Failed to load currencies, reconnect and tap to try again</string>
+    <string name="rates">Rates</string>
 </resources>

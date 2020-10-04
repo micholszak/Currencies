@@ -4,5 +4,5 @@ import pl.olszak.currencies.domain.data.model.Currency
 
 data class CurrencyState(
     val enteredValue: String = "",
-    val currentList: List<Currency> = emptyList(),
+    val currentList: List<Currency> = emptyList()
 )

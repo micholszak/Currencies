@@ -9,6 +9,7 @@ import pl.olszak.currencies.domain.GetCurrenciesContinuously
 import pl.olszak.currencies.domain.data.model.Currency
 import pl.olszak.currencies.presentation.model.CurrencyItemConverter
 import pl.olszak.currencies.presentation.model.CurrencyState
+import pl.olszak.currencies.presentation.model.CurrencyViewState
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 
 class CurrencyViewModel @ViewModelInject constructor(
@@ -17,28 +18,33 @@ class CurrencyViewModel @ViewModelInject constructor(
     private val itemConverter: CurrencyItemConverter
 ) : ViewModel() {
 
-    private val mutableItems: MutableLiveData<List<CurrencyItem>> =
-        MutableLiveData(emptyList())
-    val displayableItems: LiveData<List<CurrencyItem>> = mutableItems
+    private val mutableViewState: MutableLiveData<CurrencyViewState> =
+        MutableLiveData(CurrencyViewState.Loading)
+    val viewState: LiveData<CurrencyViewState> = mutableViewState
 
-    private var state = CurrencyState()
+    private var viewModelState = CurrencyState()
 
-    init {
+    fun fetchCurrencies() {
         requestForList()
     }
 
     fun onCurrencyChosen(item: CurrencyItem) {
-        state = state.copy(
+        viewModelState = viewModelState.copy(
             enteredValue = item.amount,
-            currentList = state.currentList.reorderFor(item.code)
+            currentList = viewModelState.currentList.reorderFor(item.code)
         )
         populateAdapter()
         requestForList(code = item.code)
     }
 
     fun onCurrencyValueChange(enteredValue: String) {
-        state = state.copy(enteredValue = enteredValue)
+        viewModelState = viewModelState.copy(enteredValue = enteredValue)
         populateAdapter()
+    }
+
+    fun tryRefresh() {
+        postLoading()
+        requestForList()
     }
 
     override fun onCleared() {
@@ -54,6 +60,9 @@ class CurrencyViewModel @ViewModelInject constructor(
             onNext = { currencies ->
                 populateStateWith(currencies)
                 populateAdapter()
+            },
+            onError = {
+                postError()
             }
         )
     }
@@ -61,23 +70,35 @@ class CurrencyViewModel @ViewModelInject constructor(
     private fun populateAdapter() {
         val adapterItems: List<CurrencyItem> =
             itemConverter.convertFor(
-                currentValue = state.enteredValue,
-                currencies = state.currentList
+                currentValue = viewModelState.enteredValue,
+                currencies = viewModelState.currentList
             )
-        mutableItems.postValue(adapterItems)
+        mutableViewState.postValue(
+            CurrencyViewState.SuccessfulFetch(
+                displayableItems = adapterItems
+            )
+        )
     }
 
     private fun populateStateWith(currencies: List<Currency>) {
-        val newList: List<Currency> = if (state.currentList.isEmpty()) {
+        val newList: List<Currency> = if (viewModelState.currentList.isEmpty()) {
             currencies
         } else {
-            val currentOrder = state.currentList.map(Currency::code)
+            val currentOrder = viewModelState.currentList.map(Currency::code)
             val currenciesMap = currencies.associateBy(Currency::code)
             currentOrder.mapNotNull { code -> currenciesMap[code] }
         }
-        state = state.copy(
+        viewModelState = viewModelState.copy(
             currentList = newList
         )
+    }
+
+    private fun postError() {
+        mutableViewState.postValue(CurrencyViewState.NetworkError)
+    }
+
+    private fun postLoading() {
+        mutableViewState.postValue(CurrencyViewState.Loading)
     }
 
     private fun clearSubscriptions() {

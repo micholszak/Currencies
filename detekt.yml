@@ -6,3 +6,7 @@ style:
   active: true
   MagicNumber:
     active: false
+complexity:
+  active: true
+  TooManyFunctions:
+    thresholdInClasses: 20

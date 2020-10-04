@@ -27,3 +27,13 @@ fun <T> LiveData<T>.getOrAwaitValue(
 
     return requireNotNull(data)
 }
+
+fun <T> LiveData<T>.collectEmissions(): List<T> {
+    val data: MutableList<T> = mutableListOf()
+    val observer = Observer<T> { newValue ->
+        data.add(newValue)
+    }
+
+    observeForever(observer)
+    return data
+}
