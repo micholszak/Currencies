@@ -7,6 +7,7 @@
     <color name="colorControlNormal">#D6DBE0</color>
 
     <color name="textColorNormal">#191C1F</color>
+    <color name="textColorSecondary">#8B959E</color>
     <color name="textColorNormalInverse">#FFFFFF</color>
 
     <color name="colorBackgroundError">#C30008</color>

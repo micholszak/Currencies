@@ -1,7 +1,7 @@
 package pl.olszak.currencies.view.adapter
 
 import android.os.Bundle
-import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,18 +14,23 @@ import pl.olszak.currencies.core.view.adapter.BaseViewHolder
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 
 class CurrencyViewHolder(
-    view: View
-) : BaseViewHolder<CurrencyItem>(view) {
+    parent: ViewGroup
+) : BaseViewHolder<CurrencyItem>(
+    parent = parent,
+    layoutId = R.layout.currency_list_item
+) {
 
     var onValueChange: (String) -> Unit = {}
     var onClick: (item: CurrencyItem) -> Unit = {}
 
-    private val currencyCodeText: TextView = itemView.findViewById(R.id.currency__code_text)
+    private val currencyCodeText: TextView = itemView.findViewById(R.id.currency_code_text)
+    private val currencyNameText: TextView = itemView.findViewById(R.id.currency_name_text)
     private val flagImage: ImageView = itemView.findViewById(R.id.flag_image)
     private val currencyEdit: EditText = itemView.findViewById(R.id.currency_edit)
 
     override fun bind(item: CurrencyItem) {
         currencyCodeText.text = item.code
+        currencyNameText.text = item.name
         flagImage.load(item.flag.url)
         setupEdit(item.amount)
         setupOnClickListener(item)

@@ -1,10 +1,8 @@
 package pl.olszak.currencies.view.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import pl.olszak.currencies.R
 import pl.olszak.currencies.core.view.SimpleDiffUtilCallback
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 
@@ -15,11 +13,8 @@ class CurrencyItemAdapter(
 
     private val items: MutableList<CurrencyItem> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.currency_list_item, parent, false)
-        return CurrencyViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder =
+        CurrencyViewHolder(parent)
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         holder.bind(items[position])

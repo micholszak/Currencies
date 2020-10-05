@@ -17,28 +17,40 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/currency__code_text"
+        android:id="@+id/currency_code_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
+        android:layout_marginStart="@dimen/currency_custom_margin"
         android:textColor="@color/textColorNormal"
-        android:textSize="@dimen/currency_code_text_size"
+        android:textSize="@dimen/medium_text_size"
         app:layout_constraintStart_toEndOf="@id/flag_image"
         app:layout_constraintTop_toTopOf="@id/flag_image"
         tools:text="PLN" />
+
+    <TextView
+        android:id="@+id/currency_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/currency_custom_margin"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/flag_image"
+        app:layout_constraintStart_toEndOf="@id/flag_image"
+        app:layout_constraintTop_toBottomOf="@id/currency_code_text"
+        tools:text="Polish Zloty" />
 
     <EditText
         android:id="@+id/currency_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/minimum_width"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/medium_margin"
         android:hint="@string/currency_calculator_hint"
-        android:maxLength="10"
         android:inputType="number|numberDecimal"
+        android:maxLength="10"
+        android:minWidth="@dimen/minimum_width"
         android:textColor="@color/textColorNormal"
-        android:textSize="@dimen/currency_text_size"
+        android:textSize="@dimen/extra_large_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
