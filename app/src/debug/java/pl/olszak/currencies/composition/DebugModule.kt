@@ -4,6 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.multibindings.IntoSet
 import pl.olszak.currencies.core.DebugLogger
 import pl.olszak.currencies.core.LogCatLogger
 
@@ -12,5 +13,6 @@ import pl.olszak.currencies.core.LogCatLogger
 abstract class DebugModule {
 
     @Binds
+    @IntoSet
     abstract fun bindLogger(logCatLogger: LogCatLogger): DebugLogger
 }
