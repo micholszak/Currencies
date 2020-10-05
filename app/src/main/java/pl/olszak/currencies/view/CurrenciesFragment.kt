@@ -41,11 +41,6 @@ class CurrenciesFragment : Fragment() {
     ): View? =
         inflater.inflate(R.layout.fragment_currencies, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.fetchCurrencies()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemContainer = view.findViewById(R.id.item_container)
@@ -58,6 +53,11 @@ class CurrenciesFragment : Fragment() {
             viewModel.tryRefresh()
         }
         viewModel.viewState.observe(viewLifecycleOwner, Observer(::render))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchCurrencies()
     }
 
     private fun setupItemContainer() {
