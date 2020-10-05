@@ -13,9 +13,10 @@ import pl.olszak.currencies.core.concurrent.TestSchedulersProvider
 import pl.olszak.currencies.core.getOrAwaitValue
 import pl.olszak.currencies.domain.GetCurrenciesContinuously
 import pl.olszak.currencies.domain.data.model.Currency
-import pl.olszak.currencies.presentation.model.CurrencyItemConverter
 import pl.olszak.currencies.presentation.model.CurrencyViewState
-import pl.olszak.currencies.remote.ConstantFlagProvider
+import pl.olszak.currencies.presentation.model.provider.ConstantFlagProvider
+import pl.olszak.currencies.presentation.model.provider.CurrencyItemConverter
+import pl.olszak.currencies.presentation.model.provider.EmptyCurrencyNameProvider
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 import pl.olszak.currencies.view.adapter.model.Flag
 import java.math.BigDecimal
@@ -45,7 +46,6 @@ class CurrencyViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val schedulersProvider = TestSchedulersProvider()
-    private val flagProvider = ConstantFlagProvider(URL)
     private val useCase: GetCurrenciesContinuously = mock {
         on {
             execute(
@@ -61,7 +61,8 @@ class CurrencyViewModelTest {
     )
     private val itemConverter = spy(
         CurrencyItemConverter(
-            provider = flagProvider
+            flagProvider = ConstantFlagProvider(URL),
+            nameProvider = EmptyCurrencyNameProvider
         )
     )
     private lateinit var viewModel: CurrencyViewModel
@@ -176,6 +177,7 @@ class CurrencyViewModelTest {
         viewModel.onCurrencyChosen(
             CurrencyItem(
                 code = USD,
+                name = "",
                 flag = Flag(),
                 amount = currencyAmount
             )

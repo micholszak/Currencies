@@ -7,7 +7,9 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
 import pl.olszak.currencies.domain.data.model.Currency
-import pl.olszak.currencies.remote.FlagProvider
+import pl.olszak.currencies.presentation.model.provider.CurrencyItemConverter
+import pl.olszak.currencies.presentation.model.provider.CurrencyNameProvider
+import pl.olszak.currencies.presentation.model.provider.FlagProvider
 import pl.olszak.currencies.view.adapter.model.Flag
 import java.math.BigDecimal
 
@@ -24,7 +26,13 @@ class CurrencyItemConverterTest {
     private val mockFlagProvider: FlagProvider = mock {
         on { forCurrency(any()) } doReturn Flag()
     }
-    private val converter = CurrencyItemConverter(mockFlagProvider)
+    private val mockNameProvider: CurrencyNameProvider = mock {
+        on { forCode(any()) } doReturn ""
+    }
+    private val converter = CurrencyItemConverter(
+        flagProvider = mockFlagProvider,
+        nameProvider = mockNameProvider
+    )
 
     @Test
     fun `Empty currency list converts to empty list`() {

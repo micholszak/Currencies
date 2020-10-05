@@ -1,15 +1,15 @@
-package pl.olszak.currencies.presentation.model
+package pl.olszak.currencies.presentation.model.provider
 
 import pl.olszak.currencies.core.formatToString
 import pl.olszak.currencies.core.toBigDecimal
 import pl.olszak.currencies.domain.data.model.Currency
-import pl.olszak.currencies.remote.FlagProvider
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 import java.math.BigDecimal
 import javax.inject.Inject
 
 class CurrencyItemConverter @Inject constructor(
-    private val provider: FlagProvider
+    private val flagProvider: FlagProvider,
+    private val nameProvider: CurrencyNameProvider
 ) {
 
     companion object {
@@ -25,7 +25,8 @@ class CurrencyItemConverter @Inject constructor(
             }
             CurrencyItem(
                 code = currency.code,
-                flag = provider.forCurrency(currency.code),
+                name = nameProvider.forCode(currency.code),
+                flag = flagProvider.forCurrency(currency.code),
                 amount = amount
             )
         }

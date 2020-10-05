@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import pl.olszak.currencies.core.concurrent.SchedulerFacade
 import pl.olszak.currencies.domain.GetCurrenciesContinuously
 import pl.olszak.currencies.domain.data.model.Currency
-import pl.olszak.currencies.presentation.model.CurrencyItemConverter
 import pl.olszak.currencies.presentation.model.CurrencyState
 import pl.olszak.currencies.presentation.model.CurrencyViewState
+import pl.olszak.currencies.presentation.model.provider.CurrencyItemConverter
 import pl.olszak.currencies.view.adapter.model.CurrencyItem
 
 class CurrencyViewModel @ViewModelInject constructor(

@@ -1,4 +1,4 @@
-package pl.olszak.currencies.remote
+package pl.olszak.currencies.presentation.model.provider
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test

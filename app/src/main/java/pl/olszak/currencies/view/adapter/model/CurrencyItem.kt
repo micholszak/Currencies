@@ -6,6 +6,7 @@ import pl.olszak.currencies.core.view.model.AdapterItem
 
 data class CurrencyItem(
     val code: String,
+    val name: String,
     val flag: Flag,
     val amount: String
 ) : AdapterItem {
