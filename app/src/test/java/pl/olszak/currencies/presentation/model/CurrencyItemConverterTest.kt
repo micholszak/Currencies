@@ -94,7 +94,7 @@ class CurrencyItemConverterTest {
         val currentValue = "5"
         val currencies = createCurrencies(1, BigDecimal.ONE)
 
-        val result = converter.convertFor(currentValue, currencies)
+        converter.convertFor(currentValue, currencies)
 
         verify(mockFlagProvider).forCurrency(currencies.first().code)
     }
