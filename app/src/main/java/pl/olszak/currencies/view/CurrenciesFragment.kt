@@ -53,10 +53,6 @@ class CurrenciesFragment : Fragment() {
             viewModel.tryRefresh()
         }
         viewModel.viewState.observe(viewLifecycleOwner, Observer(::render))
-    }
-
-    override fun onResume() {
-        super.onResume()
         viewModel.fetchCurrencies()
     }
 
