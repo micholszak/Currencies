@@ -23,6 +23,7 @@ android {
 
     productFlavors {
         mock {
+            applicationId "pl.olszak.currencies.mock"
             dimension "api"
         }
         production {
@@ -32,11 +33,20 @@ android {
 
     buildTypes {
         debug {
+            versionNameSuffix "-DEBUG"
+            applicationIdSuffix ".debug"
             debuggable true
             minifyEnabled false
             shrinkResources false
         }
-
+        releasePreprod {
+            versionNameSuffix "-PREPROD"
+            applicationIdSuffix ".preprod"
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             debuggable false
             minifyEnabled true
