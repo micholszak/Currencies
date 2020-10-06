@@ -67,57 +67,42 @@ class CurrenciesScreenTest : TestCase() {
                 screenRobot.assertEveryRowsItemVisible()
             }
             step("Views contain values mapped from feed") {
-                screenRobot.assertRowContainsValues(
-                    position = 0,
+                val valuesList: List<CurrencyValues> = listOf(
                     CurrencyValues(
                         code = "EUR",
                         name = "Euro",
-                    )
-                )
-                screenRobot.assertRowContainsValues(
-                    position = 1,
+                    ),
                     CurrencyValues(
                         code = "AUD",
                         name = "Australian Dollar"
-                    )
-                )
-                screenRobot.assertRowContainsValues(
-                    position = 2,
+                    ),
                     CurrencyValues(
                         code = "BRL",
                         name = "Brazil Real"
-                    )
-                )
-                screenRobot.assertRowContainsValues(
-                    position = 3,
+                    ),
                     CurrencyValues(
                         code = "CAD",
                         name = "Canada Dollar"
-                    )
-                )
-                screenRobot.assertRowContainsValues(
-                    position = 4,
+                    ),
                     CurrencyValues(
                         code = "PLN",
                         name = "Poland Zloty"
-                    )
-                )
-                screenRobot.assertRowContainsValues(
-                    position = 5,
+                    ),
                     CurrencyValues(
                         code = "USD",
                         name = "United States Dollar"
                     )
                 )
+                screenRobot.assertListContainsValues(valuesList = valuesList)
             }
         }
     }
 
     @Test
     fun clickingAnItemBringsItToTheTop() {
-        run("Clicking an item brings it to the top") {
+        run("Clicking an item brings it to the top of the list") {
             step("Perform click on an PLN rate") {
-                screenRobot.performClickOnRow(position = 4)
+                screenRobot.clickOnRow(position = 4)
             }
             step("PLN should be at the top of the list") {
                 screenRobot.assertRowContainsValues(
@@ -131,6 +116,132 @@ class CurrenciesScreenTest : TestCase() {
             step("List should be properly ordered") {
                 val orderedCodes = listOf("PLN", "EUR", "AUD", "BRL", "CAD", "USD")
                 screenRobot.assertRowOrder(codes = orderedCodes)
+            }
+        }
+    }
+
+    @Test
+    fun editingAnItemBringItToTheTop() {
+        run("Edition of item bring it to the top of the list") {
+            step("Perform click on an PLN edit") {
+                screenRobot.clickOnRowsEdit(position = 4)
+            }
+            step("PLN should be at the top of the list") {
+                screenRobot.assertRowContainsValues(
+                    position = 0,
+                    CurrencyValues(
+                        code = "PLN",
+                        name = "Poland Zloty"
+                    )
+                )
+            }
+            step("List should be properly ordered") {
+                val orderedCodes = listOf("PLN", "EUR", "AUD", "BRL", "CAD", "USD")
+                screenRobot.assertRowOrder(codes = orderedCodes)
+            }
+        }
+    }
+
+    @Test
+    fun editAnItemToCalculateCurrencies() {
+        run("Edition of item triggers recalculation of other rates") {
+            step("Edit PLN value") {
+                screenRobot.editValueOfRow(position = 4, value = "5")
+            }
+            step("List should refresh according to entered value") {
+                val valuesList: List<CurrencyValues> = listOf(
+                    CurrencyValues(
+                        code = "PLN",
+                        name = "Poland Zloty",
+                        value = "5"
+                    ),
+                    CurrencyValues(
+                        code = "EUR",
+                        name = "Euro",
+                        value = "5.00"
+                    ),
+                    CurrencyValues(
+                        code = "AUD",
+                        name = "Australian Dollar",
+                        value = "5.00"
+                    ),
+                    CurrencyValues(
+                        code = "BRL",
+                        name = "Brazil Real",
+                        value = "5.00"
+                    ),
+                    CurrencyValues(
+                        code = "CAD",
+                        name = "Canada Dollar",
+                        value = "5.00"
+                    ),
+                    CurrencyValues(
+                        code = "USD",
+                        name = "United States Dollar",
+                        value = "5.00"
+                    )
+                )
+                screenRobot.assertListContainsValues(valuesList = valuesList)
+            }
+        }
+    }
+
+    @Test
+    fun valueIsCopiedToClickedItem() {
+        run("Previously entered value is copied to clickedItem") {
+            step("Edit PLN value") {
+                screenRobot.editValueOfRow(4, "10")
+            }
+            step("Change focused item with click") {
+                screenRobot.clickOnRow(2)
+            }
+            step("Check that current value matches edition") {
+                screenRobot.assertRowContainsValues(
+                    position = 0,
+                    values = CurrencyValues(
+                        code = "AUD",
+                        name = "Australian Dollar",
+                        value = "10.00"
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun invalidValueEnteredResultsInEmptyValues() {
+        run("Non numeric value entered to text field results in empty values in list") {
+            step("Try edit EUR value") {
+                screenRobot.editValueOfRow(0, "Something")
+            }
+            step("Check that the values of rates are not filled") {
+                val values: List<CurrencyValues> = listOf(
+                    CurrencyValues(
+                        code = "EUR",
+                        name = "Euro"
+                    ),
+                    CurrencyValues(
+                        code = "AUD",
+                        name = "Australian Dollar"
+                    ),
+                    CurrencyValues(
+                        code = "BRL",
+                        name = "Brazil Real"
+                    ),
+                    CurrencyValues(
+                        code = "CAD",
+                        name = "Canada Dollar"
+                    ),
+                    CurrencyValues(
+                        code = "PLN",
+                        name = "Poland Zloty"
+                    ),
+                    CurrencyValues(
+                        code = "USD",
+                        name = "United States Dollar"
+                    )
+                )
+                screenRobot.assertListContainsValues(valuesList = values)
             }
         }
     }

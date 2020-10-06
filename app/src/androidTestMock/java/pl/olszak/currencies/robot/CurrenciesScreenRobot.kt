@@ -13,6 +13,38 @@ class CurrenciesScreenRobot {
         }
     }
 
+    fun clickOnRow(position: Int) {
+        CurrenciesScreen {
+            itemContainer {
+                childAt<CurrenciesScreen.CurrencyRow>(position) {
+                    perform { click() }
+                }
+            }
+        }
+    }
+
+    fun clickOnRowsEdit(position: Int) {
+        CurrenciesScreen {
+            itemContainer {
+                childAt<CurrenciesScreen.CurrencyRow>(position) {
+                    currencyEdit {
+                        perform { click() }
+                    }
+                }
+            }
+        }
+    }
+
+    fun editValueOfRow(position: Int, value: String) {
+        CurrenciesScreen {
+            itemContainer {
+                childAt<CurrenciesScreen.CurrencyRow>(position) {
+                    currencyEdit.perform { typeText(value) }
+                }
+            }
+        }
+    }
+
     fun assertErrorStateIsVisible() {
         CurrenciesScreen {
             errorContainer {
@@ -63,19 +95,9 @@ class CurrenciesScreenRobot {
         CurrenciesScreen {
             itemContainer {
                 childAt<CurrenciesScreen.CurrencyRow>(position) {
-                    currencyCodeText.containsText(values.code)
-                    currencyNameText.containsText(values.name)
-                    currencyEdit.containsText(values.value)
-                }
-            }
-        }
-    }
-
-    fun performClickOnRow(position: Int) {
-        CurrenciesScreen {
-            itemContainer {
-                childAt<CurrenciesScreen.CurrencyRow>(position) {
-                    perform { click() }
+                    currencyCodeText.hasText(values.code)
+                    currencyNameText.hasText(values.name)
+                    currencyEdit.hasText(values.value)
                 }
             }
         }
@@ -86,7 +108,21 @@ class CurrenciesScreenRobot {
             itemContainer {
                 codes.forEachIndexed { position, code ->
                     childAt<CurrenciesScreen.CurrencyRow>(position) {
-                        currencyCodeText.containsText(code)
+                        currencyCodeText.hasText(code)
+                    }
+                }
+            }
+        }
+    }
+
+    fun assertListContainsValues(valuesList: List<CurrencyValues>) {
+        CurrenciesScreen {
+            itemContainer {
+                valuesList.forEachIndexed { position, values ->
+                    childAt<CurrenciesScreen.CurrencyRow>(position) {
+                        currencyCodeText.hasText(values.code)
+                        currencyNameText.hasText(values.name)
+                        currencyEdit.hasText(values.value)
                     }
                 }
             }
